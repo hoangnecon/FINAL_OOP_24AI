@@ -49,7 +49,11 @@ public class RoundedButtonPanel extends JPanel {
             }
         });
     }
-
+    @Override
+    public void setFont(Font font) {
+        super.setFont(font);
+        repaint();
+    }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -67,9 +71,8 @@ public class RoundedButtonPanel extends JPanel {
 
 
         g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 50, 50);
-        Font loginbuttonFont = FontInput.loadFont("src/SourceFont/JetBrainsMono-Bold.ttf", 32f);
         g2d.setColor(Color.WHITE);
-        g2d.setFont(loginbuttonFont);
+        g2d.setFont(getFont());
         FontMetrics metrics = g2d.getFontMetrics();
         int x = (getWidth() - metrics.stringWidth(text)) / 2;
         int y = (getHeight() - metrics.getHeight()) / 2 + metrics.getAscent();

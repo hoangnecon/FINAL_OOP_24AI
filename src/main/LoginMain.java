@@ -161,7 +161,7 @@ public class LoginMain extends JFrame {
         passtf.insets = new Insets(0, 0, 0, 0);
         panel2.add(pass_field_panel, passtf);
 
-        //this í show password checkbox
+        //this is show password checkbox
         ImageIcon checkedicon = new ImageIcon("src/imagesource/view.png");
         ImageIcon uncheckedicon = new ImageIcon("src/imagesource/eye.png");
         uncheckedicon = ImageCheckbox.resizeIcon(uncheckedicon, 20, 20);
@@ -209,9 +209,6 @@ public class LoginMain extends JFrame {
 
         Connection finalConnection = connection;
         login_button_panel.addMouseListener(new LoginListener(username_field, pass_field, finalConnection));
-
-        login_button_panel.setFont(loginbuttonFont);
-        login_button_panel.setPreferredSize(new Dimension(150, 50));
         login_button_panel.setFont(loginbuttonFont);
         login_button_panel.setForeground(Color.WHITE);
         login_button_panel.setBackground(new Color(0x522C5D));

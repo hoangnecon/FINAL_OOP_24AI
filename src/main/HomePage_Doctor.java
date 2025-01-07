@@ -5,22 +5,16 @@ import Apply2D.FontInput;
 import Apply2D.TransparentRoundedButtonWithHighlight;
 import ConnectData.getProfile;
 import Features.DisplayPatients;
-import Listener.ButtonClickListener;
-import Listener.EditPatientListener;
 import Listener.LoginListener;
 import Listener.LogoutListener;
-
-import javax.print.Doc;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.BitSet;
 
 import static Apply2D.Application_Graphics.drawRoundedBorder;
 import static Apply2D.Application_Graphics.drawRoundedPanel;
@@ -105,7 +99,7 @@ public class HomePage_Doctor extends JPanel {
         this.add(titlebar, BorderLayout.NORTH);
 
         JPanel choose = new JPanel(new GridBagLayout());
-        choose.setPreferredSize(new Dimension(1440, 918));
+        choose.setPreferredSize(new Dimension(1440, 950));
         choose.setOpaque(false);
         choose.setBackground(Color.white);
 
@@ -149,13 +143,13 @@ public class HomePage_Doctor extends JPanel {
         p1.setOpaque(false);
         p1.setPreferredSize(new Dimension(290, 273));
         p1.setBackground(Color.WHITE);
-        GridBagConstraints p1oposition = new GridBagConstraints();
-        p1oposition.gridx = 1;
-        p1oposition.gridy = 1;
-        p1oposition.weightx = 1;
-        p1oposition.weighty = 1;
-        p1oposition.insets = new Insets(0, 250, 250, 0);
-        p1oposition.fill = GridBagConstraints.NONE;
+        GridBagConstraints p1position = new GridBagConstraints();
+        p1position.gridx = 1;
+        p1position.gridy = 1;
+        p1position.weightx = 1;
+        p1position.weighty = 1;
+        p1position.insets = new Insets(0, 250, 250, 0);
+        p1position.fill = GridBagConstraints.NONE;
 
         JPanel p2 = new JPanel(new GridBagLayout()) {
             @Override
@@ -227,12 +221,10 @@ public class HomePage_Doctor extends JPanel {
             p3position.insets = new Insets(0, 0, 250, 250);
             p3position.fill = GridBagConstraints.NONE;
 
-            choose.add(p1, p1oposition);
+            choose.add(p1, p1position);
             choose.add(p2, p2position);
             choose.add(p3, p3position);
 
-
-            //this is label in 3 panel
 
             //this is p1
             JLabel add = new JLabel(new ImageIcon("src/imagesource/blue-linear-outline-add-person-icon-user-vector-29004179_1-removebg-preview.png"));
@@ -305,7 +297,6 @@ public class HomePage_Doctor extends JPanel {
 
 
             add(choose, BorderLayout.SOUTH);
-//        setExtendedState(JFrame.MAXIMIZED_BOTH);
             setVisible(true);
         } catch (SQLException e) {
             throw new RuntimeException(e);

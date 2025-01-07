@@ -131,7 +131,7 @@ public class Homepage_Profile extends JPanel {
         this.add(titlebar, BorderLayout.NORTH);
 
         JPanel choose = new JPanel(new GridBagLayout());
-        choose.setPreferredSize(new Dimension(1440,918));
+        choose.setPreferredSize(new Dimension(1440,950));
         choose.setOpaque(false);
         choose.setBackground(Color.white);
 
