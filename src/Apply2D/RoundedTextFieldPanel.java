@@ -8,8 +8,8 @@ public class RoundedTextFieldPanel extends JPanel {
 
     public RoundedTextFieldPanel(int cornerRadius) {
         this.cornerRadius = cornerRadius;
-        setOpaque(false); // Đảm bảo nền không bị ghi đè
-        setLayout(new GridBagLayout()); // Dùng để căn chỉnh thành phần bên trong
+        setOpaque(false);
+        setLayout(new GridBagLayout());
     }
 
     @Override

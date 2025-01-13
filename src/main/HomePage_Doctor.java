@@ -167,7 +167,6 @@ public class HomePage_Doctor extends JPanel {
                 String doctorName = profile.getFullName();
                 String specialization = profile.getSpecialization();
                 UpdatePatientDialog edit = new UpdatePatientDialog(parent, customID, doctorName, specialization);
-                edit.setVisible(true);
             }
         });
         Application_Graphics.applyHoverEffect(p2, Color.white, Color.black);

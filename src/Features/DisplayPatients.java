@@ -11,18 +11,20 @@ import java.sql.SQLException;
 import Apply2D.FontInput;
 import Apply2D.RoundedButtonPanel;
 import Apply2D.RoundedTextFieldPanel;
+import ConnectData.getProfile;
+import Listener.LoginListener;
 import main.DatabaseConnect;
 
 public class DisplayPatients extends JFrame {
 
     public DisplayPatients(int doctorID) {
-//        Connection connection;
-//        try {
-//            connection = DatabaseConnect.getConnection();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        getProfile profile = new getProfile(connection, LoginListener.getLoggedInUserId());
+        Connection connection;
+        try {
+            connection = DatabaseConnect.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        getProfile profile = new getProfile(connection, LoginListener.getLoggedInUserId());
         setTitle("Danh sách bệnh nhân");
         setSize(1440, 1024);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -212,8 +214,5 @@ public class DisplayPatients extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Lỗi cơ sở dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    public static void main(String[] args){
-        new DisplayPatients(7);
     }
     }

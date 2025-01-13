@@ -245,3 +245,4 @@ VALUES
 
 
 
+select * from Patients;

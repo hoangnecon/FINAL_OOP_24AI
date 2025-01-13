@@ -1,41 +1,110 @@
 package Features;
 
+import Apply2D.RoundedTextFieldPanel;
+
 import javax.swing.*;
 import java.awt.*;
-
 
 public class AddPatientPanel extends JPanel {
     private JTextField tfPatientName, tfGender, tfDateOfBirth, tfPhoneNumber, tfAddress, tfDiseaseName;
 
     public AddPatientPanel() {
-        setLayout(new GridLayout(6, 2, 10, 10));
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setLayout(new GridBagLayout());
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        add(new JLabel("Họ và tên bệnh nhân:"));
+        GridBagConstraints po = new GridBagConstraints();
+
+        po.fill = GridBagConstraints.HORIZONTAL;
+        po.weightx = 1.0;
+
+        JLabel title = new JLabel("Thêm Thông Tin Bệnh Nhân");
+        title.setFont(new Font("Arial", Font.BOLD, 32));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        po.gridx = 0;
+        po.gridy = 0;
+        po.gridwidth = 2;
+        po.insets = new Insets(0, 50, 50, 0);
+        add(title, po);
+
+
+        po.insets = new Insets(30, 10, 10, 10);
+        po.gridwidth = 1;
+
+        po.gridx = 0;
+        po.gridy = 1;
+        add(new JLabel("Họ và tên bệnh nhân:"), po);
         tfPatientName = new JTextField();
-        add(tfPatientName);
+        tfPatientName.setBorder(BorderFactory.createEmptyBorder());
+        RoundedTextFieldPanel patientNamePanel = new RoundedTextFieldPanel(20);
+        patientNamePanel.add(tfPatientName);
+        tfPatientName.setPreferredSize(new Dimension(300, 30));
+        po.gridx = 1;
+        add(patientNamePanel, po);
 
-        add(new JLabel("Giới tính (Nam/Nữ):"));
+        po.gridx = 0;
+        po.gridy = 2;
+        add(new JLabel("Giới tính (Nam/Nữ):"), po);
         tfGender = new JTextField();
-        add(tfGender);
+        tfGender.setBorder(BorderFactory.createEmptyBorder());
+        RoundedTextFieldPanel genderPanel = new RoundedTextFieldPanel(20);
+        genderPanel.setPreferredSize(new Dimension(300,30));
+        genderPanel.add(tfGender);
+        tfGender.setPreferredSize(new Dimension(300, 30));
+        po.gridx = 1;
+        add(genderPanel, po);
 
-        add(new JLabel("Ngày sinh (YYYY-MM-DD):"));
+        po.gridx = 0;
+        po.gridy = 3;
+        add(new JLabel("Ngày sinh (YYYY-MM-DD):"), po);
         tfDateOfBirth = new JTextField();
-        add(tfDateOfBirth);
+        tfDateOfBirth.setBorder(BorderFactory.createEmptyBorder());
+        RoundedTextFieldPanel dobPanel = new RoundedTextFieldPanel(20);
+        dobPanel.setPreferredSize(new Dimension(300, 30));
+        dobPanel.add(tfDateOfBirth);
+        tfDateOfBirth.setPreferredSize(new Dimension(300, 30));
+        po.gridx = 1;
+        add(dobPanel, po);
 
-        add(new JLabel("Số điện thoại:"));
+        po.gridx = 0;
+        po.gridy = 4;
+        add(new JLabel("Số điện thoại:"), po);
         tfPhoneNumber = new JTextField();
-        add(tfPhoneNumber);
+        tfPhoneNumber.setBorder(BorderFactory.createEmptyBorder());
+        RoundedTextFieldPanel phoneNumberPanel = new RoundedTextFieldPanel(20);
+        phoneNumberPanel.setPreferredSize(new Dimension(300,30));
+        phoneNumberPanel.add(tfPhoneNumber);
+        tfPhoneNumber.setPreferredSize(new Dimension(300, 30));
+        po.gridx = 1;
+        add(phoneNumberPanel, po);
 
-        add(new JLabel("Địa chỉ:"));
+
+        po.gridx = 0;
+        po.gridy = 5;
+        add(new JLabel("Địa chỉ:"), po);
         tfAddress = new JTextField();
-        add(tfAddress);
+        tfAddress.setBorder(BorderFactory.createEmptyBorder());
+        RoundedTextFieldPanel addressPanel = new RoundedTextFieldPanel(20);
+        addressPanel.setPreferredSize(new Dimension(300, 30));
+        addressPanel.add(tfAddress);
+        tfAddress.setPreferredSize(new Dimension(300, 30));
+        po.gridx = 1;
+        add(addressPanel, po);
 
-        add(new JLabel("Tên bệnh:"));
+        po.gridx = 0;
+        po.gridy = 6;
+        add(new JLabel("Tên bệnh:"), po);
         tfDiseaseName = new JTextField();
-        add(tfDiseaseName);
+        tfDiseaseName.setBorder(BorderFactory.createEmptyBorder());
+        RoundedTextFieldPanel diseaseNamePanel = new RoundedTextFieldPanel(20);
+        diseaseNamePanel.setPreferredSize(new Dimension(300,30));
+        diseaseNamePanel.add(tfDiseaseName);
+        tfDiseaseName.setPreferredSize(new Dimension(300, 30));
+        po.gridx = 1;
+        add(diseaseNamePanel, po);
+
     }
 
+    // Getter cho các trường
     public String getPatientName() {
         return tfPatientName.getText();
     }

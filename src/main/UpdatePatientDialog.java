@@ -17,7 +17,6 @@ public class UpdatePatientDialog extends JDialog {
 
         // Tạo form tìm kiếm
         JPanel searchPanel = new JPanel(new FlowLayout());
-
         JLabel searchLabel = new JLabel("Nhập Patient ID hoặc tên bệnh nhân:");
         searchField = new JTextField(20);
         searchButton = new JButton("Tìm kiếm");
@@ -28,9 +27,8 @@ public class UpdatePatientDialog extends JDialog {
 
         add(searchPanel, BorderLayout.CENTER);
 
-        // Thêm sự kiện cho nút tìm kiếm
         searchButton.addActionListener(e -> {
-            String searchInput = searchField.getText();
+            String searchInput = searchField.getText().trim();
             if (searchInput.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;

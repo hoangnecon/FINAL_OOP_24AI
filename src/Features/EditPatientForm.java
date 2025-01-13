@@ -11,13 +11,9 @@ import java.sql.SQLException;
 public class EditPatientForm extends JDialog {
     public EditPatientForm(JDialog parentDialog, String patientName, String gender, String dateOfBirth, String phoneNumber, String address, String diseaseName, int patientID, String doctorName, String specialization) {
         super(parentDialog, "Chỉnh sửa thông tin bệnh nhân", true);
-        setTitle("");
-        setSize(600, 600);
-
         setLayout(new GridLayout(7, 2));
+        setSize(600, 400);
 
-
-        // Tạo các trường nhập liệu
         add(new JLabel("Tên bệnh nhân:"));
         JTextField nameField = new JTextField(patientName);
         add(nameField);
@@ -44,34 +40,16 @@ public class EditPatientForm extends JDialog {
 
         JButton saveButton = new JButton("Lưu thông tin");
         saveButton.addActionListener(e -> {
-            // Lấy thông tin từ các trường nhập liệu
-            String updatedName = nameField.getText();
-            String updatedGender = genderField.getText();
-            String updatedDob = dobField.getText();
-            String updatedPhone = phoneField.getText();
-            String updatedAddress = addressField.getText();
-            String updatedDisease = diseaseField.getText();
-
-            // Kiểm tra dữ liệu hợp lệ
-            if (updatedName.isEmpty() || updatedGender.isEmpty() || updatedDob.isEmpty() ||
-                    updatedPhone.isEmpty() || updatedAddress.isEmpty() || updatedDisease.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Gọi hàm lưu thông tin vào cơ sở dữ liệu
-            if (updatePatientInfo(patientID, updatedName, updatedGender, updatedDob, updatedPhone, updatedAddress, updatedDisease)) {
-                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Đóng form sau khi lưu
+            if (updatePatientInfo(patientID, nameField.getText(), genderField.getText(), dobField.getText(), phoneField.getText(), addressField.getText(), diseaseField.getText())) {
+                JOptionPane.showMessageDialog(this, "Cập nhật thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Cập nhật thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
         add(saveButton);
-        add(new JLabel());
         setLocationRelativeTo(parentDialog);
         setVisible(true);
-
     }
 
     private boolean updatePatientInfo(int patientID, String name, String gender, String dob, String phone, String address, String disease) {
@@ -90,7 +68,5 @@ public class EditPatientForm extends JDialog {
             ex.printStackTrace();
             return false;
         }
-
     }
-
 }
