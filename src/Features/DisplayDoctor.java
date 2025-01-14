@@ -113,6 +113,22 @@ public class DisplayDoctor extends JFrame {
         searchbut1.setFont(searchbutfont);
         searchbut1.setForeground(Color.WHITE);
         searchbut1.setPreferredSize(new Dimension(100,30));
+        //Thêm hoạt động tìm kiếm cho nút search
+        searchbut1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                String searchText = fieldsearch1.getText().trim(); // Lấy giá trị từ ô nhập
+                if (searchText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập thông tin cần tìm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                // Xóa dữ liệu cũ trong bảng
+                allPatientsModel.setRowCount(0);
+                // Gọi hàm tìm kiếm
+                searchDoctors(hospitalID, searchText, allPatientsModel);
+            }
+        });
+
         all.gridx=1;
         all.gridy=0;
         all.weightx=0;
@@ -126,6 +142,38 @@ public class DisplayDoctor extends JFrame {
         background.add(titlebar, BorderLayout.NORTH);
         this.setResizable(false);
         this.setVisible(true);
+    }
+
+    private void searchDoctors(int hospitalID, String searchText, DefaultTableModel tableModel) {
+        String query = "SELECT p.DoctorID, p.FullName, p.Gender, p.DateOfBirth, " +
+                "p.PhoneNumber, p.Address, p.Specialization " +
+                "FROM Doctors p " +
+                "JOIN Hospitals d ON p.HospitalID = d.HospitalID " +
+                "WHERE p.HospitalID = ? AND (p.FullName LIKE ? OR p.Specialization LIKE ?)";
+
+        try (Connection connection = DatabaseConnect.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setInt(1, hospitalID);
+            pstmt.setString(2, "%" + searchText + "%");
+            pstmt.setString(3, "%" + searchText + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                        rs.getInt("DoctorID"),
+                        rs.getString("FullName"),
+                        rs.getString("Gender"),
+                        rs.getDate("DateOfBirth"),
+                        rs.getString("PhoneNumber"),
+                        rs.getString("Address"),
+                        rs.getString("Specialization")
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 
