@@ -44,6 +44,8 @@ public class DisplayDoctor extends JFrame {
         titlebar.setPreferredSize(new Dimension(1440, 150));
         titlebar.setBackground(new Color(0x38C1CE));
 
+
+
         // Logo
         JLabel logohos = new JLabel(new ImageIcon("src/imagesource/Group 1.png"));
         logohos.setPreferredSize(new Dimension(353, 70));

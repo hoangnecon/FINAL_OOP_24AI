@@ -3,12 +3,15 @@ package Features;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.*;
 
 import Apply2D.FontInput;
 import Apply2D.RoundedButtonPanel;
 import Apply2D.RoundedTextFieldPanel;
 import ConnectData.getProfile;
+import Listener.EditPatientListener;
 import Listener.LoginListener;
 import main.DatabaseConnect;
 
@@ -18,6 +21,7 @@ public class DisplayPatients extends JFrame {
         private  String Gender;
         private  String DOB;
         private String DiseaseName;
+        private EditPatientListener editPatientListener;
 
         private int doctoridallpatient;
         private String doctornameallpatient;
@@ -139,6 +143,51 @@ public class DisplayPatients extends JFrame {
         searchbut1.setFont(searchbutfont);
         searchbut1.setForeground(Color.WHITE);
         searchbut1.setPreferredSize(new Dimension(100,30));
+        // Tạo hoạt động tìm kiếm trong bảng bệnh nhân trong khoa
+        searchbut1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String searchText = fieldsearch1.getText().trim();
+                if (searchText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập thông tin tìm kiếm!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+                // Xóa dữ liệu cũ trong bảng
+                allPatientsModel.setRowCount(0);
+
+                String query = "SELECT p.PatientID, p.FullName AS PatientName, p.Gender, p.DateOfBirth, " +
+                        "p.DiseaseName, p.DoctorID AS AssignedDoctorID, d.FullName AS AssignedDoctorName " +
+                        "FROM Patients p " +
+                        "JOIN Doctors d ON p.DoctorID = d.DoctorID " +
+                        "WHERE p.Specialization = (SELECT Specialization FROM Doctors WHERE DoctorID = ?) " +
+                        "AND (p.PatientID = ? OR p.FullName LIKE ?)";
+
+                try (Connection connection = DatabaseConnect.getConnection();
+                     PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+                    pstmt.setInt(1, doctorID);
+                    pstmt.setString(2, searchText.matches("\\d+") ? searchText : "0");
+                    pstmt.setString(3, "%" + searchText + "%");
+
+                    ResultSet rs = pstmt.executeQuery();
+                    while (rs.next()) {
+                        allPatientsModel.addRow(new Object[]{
+                                rs.getInt("PatientID"),
+                                rs.getString("PatientName"),
+                                rs.getString("Gender"),
+                                rs.getDate("DateOfBirth"),
+                                rs.getString("DiseaseName"),
+                                rs.getInt("AssignedDoctorID"),
+                                rs.getString("AssignedDoctorName")
+                        });
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         all.gridx=1;
         all.gridy=0;
         all.weightx=0;
@@ -176,6 +225,46 @@ public class DisplayPatients extends JFrame {
         searchbut2.setFont(searchbutfont);
         searchbut2.setForeground(Color.WHITE);
         searchbut2.setPreferredSize(new Dimension(100,30));
+        // Tạo hoạt động cho bảng bệnh nhân phụ trách
+        searchbut2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String searchText = fieldsearch2.getText().trim();
+                if (searchText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập thông tin tìm kiếm!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+
+                // Xóa dữ liệu cũ trong bảng
+                assignedPatientsModel.setRowCount(0);
+
+                String query = "SELECT PatientID, FullName, Gender, DateOfBirth, DiseaseName " +
+                        "FROM Patients " +
+                        "WHERE DoctorID = ? AND (PatientID = ? OR FullName LIKE ?)";
+
+                try (Connection connection = DatabaseConnect.getConnection();
+                     PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+                    pstmt.setInt(1, doctorID);
+                    pstmt.setString(2, searchText.matches("\\d+") ? searchText : "0");
+                    pstmt.setString(3, "%" + searchText + "%");
+
+                    ResultSet rs = pstmt.executeQuery();
+                    while (rs.next()) {
+                        assignedPatientsModel.addRow(new Object[]{
+                                rs.getInt("PatientID"),
+                                rs.getString("FullName"),
+                                rs.getString("Gender"),
+                                rs.getDate("DateOfBirth"),
+                                rs.getString("DiseaseName")
+                        });
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         assign.gridx=1;
         assign.gridy=0;
         assign.weightx=0;
