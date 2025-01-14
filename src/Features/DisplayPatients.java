@@ -3,10 +3,7 @@ package Features;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import Apply2D.FontInput;
 import Apply2D.RoundedButtonPanel;
@@ -16,7 +13,14 @@ import Listener.LoginListener;
 import main.DatabaseConnect;
 
 public class DisplayPatients extends JFrame {
+        private int PatientID;
+        private String FullName;
+        private  String Gender;
+        private  String DOB;
+        private String DiseaseName;
 
+        private int doctoridallpatient;
+        private String doctornameallpatient;
     public DisplayPatients(int doctorID) {
         Connection connection;
         try {
@@ -24,6 +28,9 @@ public class DisplayPatients extends JFrame {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+
+
         getProfile profile = new getProfile(connection, LoginListener.getLoggedInUserId());
         setTitle("Danh sách bệnh nhân");
         setSize(1440, 1024);
@@ -48,20 +55,15 @@ public class DisplayPatients extends JFrame {
         logo_position.fill = GridBagConstraints.NONE;
         titlebar.add(logohos, logo_position);
 
-
-
-
-
         JPanel main = new JPanel(new GridBagLayout());
         main.setPreferredSize(new Dimension(1440,878));
-
 
         JTable allPatientsTable = new JTable();
         allPatientsTable.setPreferredScrollableViewportSize(new Dimension(700,200));
         JScrollPane allPatientsScrollPane = new JScrollPane(allPatientsTable);
         allPatientsScrollPane.setPreferredSize(new Dimension(700, 200));
         DefaultTableModel allPatientsModel = new DefaultTableModel();
-        allPatientsModel.setColumnIdentifiers(new String[]{"Mã bệnh nhân", "Họ tên", "Giới tính", "Ngày sinh", "Tên bệnh"});
+        allPatientsModel.setColumnIdentifiers(new String[]{"Mã bệnh nhân", "Họ tên", "Giới tính", "Ngày sinh", "Tên bệnh","ID.BS.Phụ trách","BS.phụ trách"});
         allPatientsTable.setModel(allPatientsModel);
         loadAllPatientsInDepartment(doctorID, allPatientsModel);
         GridBagConstraints all = new GridBagConstraints();
@@ -71,7 +73,7 @@ public class DisplayPatients extends JFrame {
         all.weighty=1;
         all.fill = GridBagConstraints.BOTH;
         main.add(allPatientsScrollPane, all);
-        JLabel allpatient = new JLabel("Tất cả bệnh nhân trong khoa ");
+        JLabel allpatient = new JLabel("Tất cả bệnh nhân trong khoa: "+profile.getSpecialization());
         all.gridx=0;
         all.gridy=0;
         all.weightx=0;
@@ -93,13 +95,15 @@ public class DisplayPatients extends JFrame {
         assign.weighty=1;
         assign.fill = GridBagConstraints.BOTH;
         main.add(assignedPatientsScrollPane, assign);
-        JLabel assignpatient = new JLabel("Bệnh nhân được bác sĩ phụ trách ");
+        JLabel assignpatient = new JLabel("Bệnh nhân được bác sĩ " +profile.getFullName()+ " phụ trách ");
         assign.gridx=1;
         assign.gridy=0;
         assign.weightx=0;
         assign.weighty=0;
         main.add(assignpatient,assign);
 
+
+        //panel search all
         JPanel search_p1 = new JPanel(new GridBagLayout());
         search_p1.setPreferredSize(new Dimension(700, 200));
         search_p1.setVisible(true);
@@ -110,15 +114,24 @@ public class DisplayPatients extends JFrame {
         main.add(search_p1, all);
 
 
+
+        Font fieldfont = FontInput.loadFont("src/SourceFont/JetBrainsMono-Bold.ttf", 20);
         JTextField fieldsearch1 = new JTextField();
         fieldsearch1.setOpaque(false);
         fieldsearch1.setBorder(BorderFactory.createEmptyBorder());
         RoundedTextFieldPanel fieldsearchpanel1 = new RoundedTextFieldPanel(30);
         fieldsearch1.setBackground(Color.WHITE);
+        fieldsearch1.setFont(fieldfont);
+        fieldsearchpanel1.setForeground(Color.BLACK);
         fieldsearch1.setPreferredSize(new Dimension(300,50));
-        search_p1.add(fieldsearch1);
+        all.gridx=0;
+        all.gridy=0;
+        all.weightx=0;
+        all.weighty=0;
+        all.insets= new Insets(0,0,0,0);
         fieldsearchpanel1.setPreferredSize(new Dimension(300, 50));
         fieldsearchpanel1.add(fieldsearch1);
+        search_p1.add(fieldsearchpanel1,all);
 
 
         Font searchbutfont = FontInput.loadFont("src/SourceFont/Kodchasan/Kodchasan-Bold.ttf", 18f);
@@ -126,10 +139,14 @@ public class DisplayPatients extends JFrame {
         searchbut1.setFont(searchbutfont);
         searchbut1.setForeground(Color.WHITE);
         searchbut1.setPreferredSize(new Dimension(100,30));
+        all.gridx=1;
+        all.gridy=0;
+        all.weightx=0;
+        all.weighty=0;
+        all.insets = new Insets(0,50,0,0);
+        search_p1.add(searchbut1,all);
 
-        search_p1.add(searchbut1);
-        search_p1.add(fieldsearchpanel1);
-
+        //panel search assign
         JPanel search_p2 = new JPanel(new GridBagLayout());
         search_p2.setPreferredSize(new Dimension(700, 200));
         assign.gridx=1;
@@ -143,21 +160,28 @@ public class DisplayPatients extends JFrame {
         fieldsearch2.setBorder(BorderFactory.createEmptyBorder());
         RoundedTextFieldPanel fieldsearchpanel2 = new RoundedTextFieldPanel(30);
         fieldsearch2.setBackground(Color.WHITE);
+        fieldsearch2.setFont(fieldfont);
+        fieldsearchpanel2.setForeground(Color.BLACK);
         fieldsearch2.setPreferredSize(new Dimension(300,50));
-        search_p2.add(fieldsearch2);
+        assign.gridx=0;
+        assign.gridy=0;
+        assign.weightx=0;
+        assign.weighty=0;
+        assign.insets= new Insets(0,0,0,0);
         fieldsearchpanel2.setPreferredSize(new Dimension(300, 50));
         fieldsearchpanel2.add(fieldsearch2);
+        search_p2.add(fieldsearchpanel2,assign);
 
         RoundedButtonPanel searchbut2 = new RoundedButtonPanel("Search", 3, Color.BLACK, Color.BLACK, Color.BLACK);
         searchbut2.setFont(searchbutfont);
         searchbut2.setForeground(Color.WHITE);
         searchbut2.setPreferredSize(new Dimension(100,30));
-
-        search_p2.add(searchbut2);
-        search_p2.add(fieldsearchpanel2);
-
-
-
+        assign.gridx=1;
+        assign.gridy=0;
+        assign.weightx=0;
+        assign.weighty=0;
+        assign.insets = new Insets(0,50,0,0);
+        search_p2.add(searchbut2,assign);
 
 
         this.add(background, BorderLayout.CENTER);
@@ -166,32 +190,36 @@ public class DisplayPatients extends JFrame {
         this.setResizable(false);
         this.setVisible(true);
     }
-    private void loadAllPatientsInDepartment(int doctorID, DefaultTableModel tableModel) {
-        String query = "SELECT p.PatientID, p.FullName, p.Gender, p.DateOfBirth, p.DiseaseName \n" +
-                "FROM Patients p \n" +
-                "JOIN Doctors d ON p.Specialization = d.Specialization \n" +
-                "WHERE d.DoctorID = ?";
-        try (Connection connection = DatabaseConnect.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(query)) {
 
-            pstmt.setInt(1, doctorID);
-            ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()) {
-                tableModel.addRow(new Object[]{
-                        rs.getInt("PatientID"),
-                        rs.getString("FullName"),
-                        rs.getString("Gender"),
-                        rs.getDate("DateOfBirth"),
-                        rs.getString("DiseaseName")
-                });
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi cơ sở dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+private void loadAllPatientsInDepartment(int doctorID, DefaultTableModel tableModel) {
+    String query = "SELECT p.PatientID, p.FullName AS PatientName, p.Gender, p.DateOfBirth, " +
+            "p.DiseaseName, p.DoctorID AS AssignedDoctorID, d.FullName AS AssignedDoctorName " +
+            "FROM Patients p " +
+            "JOIN Doctors d ON p.DoctorID = d.DoctorID " +
+            "WHERE p.Specialization = (SELECT Specialization FROM Doctors WHERE DoctorID = ?)";
+
+    try (Connection connection = DatabaseConnect.getConnection();
+         PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+        pstmt.setInt(1, doctorID);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            tableModel.addRow(new Object[]{
+                    rs.getInt("PatientID"),
+                    rs.getString("PatientName"),
+                    rs.getString("Gender"),
+                    rs.getDate("DateOfBirth"),
+                    rs.getString("DiseaseName"),
+                    rs.getInt("AssignedDoctorID"),
+                    rs.getString("AssignedDoctorName")
+            });
         }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-
-//    // Tải danh sách tất cả bệnh nhân được bác sĩ phụ trách
+}
     private void loadAssignedPatients(int doctorID, DefaultTableModel tableModel) {
         String query = "SELECT PatientID, FullName, Gender, DateOfBirth, DiseaseName \n" +
                 "FROM Patients \n" +
