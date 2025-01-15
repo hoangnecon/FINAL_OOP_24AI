@@ -19,8 +19,6 @@ public class DisplayDoctor extends JFrame {
     private  String DOB;
     private String DiseaseName;
 
-    private int doctoridallpatient;
-    private String doctornameallpatient;
     public DisplayDoctor(int hospitalID) {
         Connection connection;
         try {
@@ -113,11 +111,10 @@ public class DisplayDoctor extends JFrame {
         searchbut1.setFont(searchbutfont);
         searchbut1.setForeground(Color.WHITE);
         searchbut1.setPreferredSize(new Dimension(100,30));
-        //Thêm hoạt động tìm kiếm cho nút search
         searchbut1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                String searchText = fieldsearch1.getText().trim(); // Lấy giá trị từ ô nhập
+                String searchText = fieldsearch1.getText().trim();
                 if (searchText.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Vui lòng nhập thông tin cần tìm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
                     return;
@@ -135,6 +132,7 @@ public class DisplayDoctor extends JFrame {
         all.weighty=0;
         all.insets = new Insets(0,50,0,0);
         search_p1.add(searchbut1,all);
+
 
 
         this.add(background, BorderLayout.CENTER);
@@ -187,7 +185,6 @@ public class DisplayDoctor extends JFrame {
         try (Connection connection = DatabaseConnect.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(query)) {
 
-            // Gán giá trị cho tham số
             pstmt.setInt(1, hospitalID);
 
             ResultSet rs = pstmt.executeQuery();
