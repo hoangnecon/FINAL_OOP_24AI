@@ -14,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -58,7 +57,6 @@ public class Homepage_Manage extends JPanel {
         // Manage button
         TransparentRoundedButtonWithHighlight Manage = new TransparentRoundedButtonWithHighlight("Manage", new Color(0x626262));
         Manage.setActive(true);
-        Manage.setActive(true);
         GridBagConstraints Manageposition = new GridBagConstraints();
         Manageposition.gridx = 2;
         Manageposition.gridy = 0;
@@ -83,7 +81,7 @@ public class Homepage_Manage extends JPanel {
         Profileposition.fill = GridBagConstraints.NONE;
         Profileposition.weightx = 1.0;
 
-        //Logout button
+        // Logout button
         TransparentRoundedButtonWithHighlight Logout = new TransparentRoundedButtonWithHighlight("Logout", new Color(0x626262));
         GridBagConstraints Logoutposition = new GridBagConstraints();
         Logoutposition.gridx = 2;
@@ -95,7 +93,6 @@ public class Homepage_Manage extends JPanel {
 
         titlebar.add(logohos, logo_position);
         titlebar.add(Manage, Manageposition);
-//           titlebar.add(Doctor, Doctorposition);
         titlebar.add(Profile, Profileposition);
         titlebar.add(Logout, Logoutposition);
 
@@ -105,7 +102,6 @@ public class Homepage_Manage extends JPanel {
         choose.setPreferredSize(new Dimension(1440, 950));
         choose.setOpaque(false);
         choose.setBackground(Color.white);
-
 
         JLabel intro = new JLabel(new ImageIcon("src/imagesource/Group 9 (1).png"));
         intro.setPreferredSize(new Dimension(501, 83));
@@ -127,6 +123,16 @@ public class Homepage_Manage extends JPanel {
                 drawRoundedBorder(g, 0, 0, getWidth(), getHeight(), 37, 37, new Color(0xA8A8A8), 1);
             }
         };
+        p1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String customID = LoginListener.getLoggedInUserId();
+                String doctorName = profile.getFullName();
+                String specialization = profile.getSpecialization();
+                UpdatePatientDialog edit = new UpdatePatientDialog(parent, customID, doctorName, specialization);
+            }
+        });
         Application_Graphics.applyHoverEffect(p1, Color.white, Color.black);
         p1.setOpaque(false);
         p1.setPreferredSize(new Dimension(227, 273));
@@ -147,6 +153,16 @@ public class Homepage_Manage extends JPanel {
                 drawRoundedBorder(g, 0, 0, getWidth(), getHeight(), 37, 37, new Color(0xA8A8A8), 1);
             }
         };
+        p2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String customID = LoginListener.getLoggedInUserId();
+                String doctorName = profile.getFullName();
+                String specialization = profile.getSpecialization();
+                UpdatePatientDialog edit = new UpdatePatientDialog(parent, customID, doctorName, specialization);
+            }
+        });
         Application_Graphics.applyHoverEffect(p2, Color.white, Color.black);
         p2.setBackground(Color.WHITE);
         p2.setPreferredSize(new Dimension(227, 273));
@@ -168,7 +184,7 @@ public class Homepage_Manage extends JPanel {
                 drawRoundedBorder(g, 0, 0, getWidth(), getHeight(), 37, 37, new Color(0xA8A8A8), 1);
             }
         };
-        Application_Graphics.applyHoverEffect(p2, Color.white, Color.black);
+        Application_Graphics.applyHoverEffect(pm, Color.white, Color.black);
         pm.setBackground(Color.WHITE);
         pm.setPreferredSize(new Dimension(400, 400));
         pm.setOpaque(false);
@@ -200,8 +216,6 @@ public class Homepage_Manage extends JPanel {
         p3position.weighty = 1;
         p3position.insets = new Insets(0, 0, 100, 50);
         p3position.fill = GridBagConstraints.NONE;
-
-
         JPanel p4 = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -244,9 +258,7 @@ public class Homepage_Manage extends JPanel {
             choose.add(p4, p4position);
             choose.add(pm, pmposition);
 
-
-            //this is label in 3 panel
-
+            // this is label in 3 panel
             JLabel add = new JLabel(new ImageIcon("src/imagesource/blue-linear-outline-add-person-icon-user-vector-29004179_1-removebg-preview.png"));
             add.setPreferredSize(new Dimension(100, 100));
             GridBagConstraints addposition = new GridBagConstraints();
@@ -256,7 +268,6 @@ public class Homepage_Manage extends JPanel {
             addposition.weighty = 1;
             addposition.insets = new Insets(20, 0, 0, 0);
             p1.add(add, addposition);
-
 
             Font addfont = FontInput.loadFont("src/SourceFont/Kodchasan/Kodchasan-Bold.ttf", 24f);
             JLabel addtext = new JLabel("Add");
@@ -268,7 +279,6 @@ public class Homepage_Manage extends JPanel {
             addposition.weighty = 1;
             addposition.insets = new Insets(0, 0, 30, 0);
             p1.add(addtext, addposition);
-
 
             JLabel update = new JLabel(new ImageIcon("src/imagesource/repeat-pixel-perfect-gradient-linear-ui-icon-vector-43353369_1-removebg-preview.png"));
             update.setPreferredSize(new Dimension(100, 100));
@@ -311,7 +321,6 @@ public class Homepage_Manage extends JPanel {
             listpatientposition.insets = new Insets(0, 0, 30, 0);
             p3.add(listPatienttext, listpatientposition);
 
-
             JLabel listdoctor = new JLabel(new ImageIcon("src/imagesource/list_10056840 1.png"));
             listdoctor.setPreferredSize(new Dimension(100, 100));
             GridBagConstraints listdoctorposition = new GridBagConstraints();
@@ -341,7 +350,6 @@ public class Homepage_Manage extends JPanel {
             picmainposition.insets = new Insets(20, 10, 0, 0);
             pm.add(picmain, picmainposition);
 
-
             add(choose, BorderLayout.SOUTH);
 //            setExtendedState(JFrame.MAXIMIZED_BOTH);
             setVisible(true);
@@ -350,4 +358,6 @@ public class Homepage_Manage extends JPanel {
         }
     }
 }
+
+
 
