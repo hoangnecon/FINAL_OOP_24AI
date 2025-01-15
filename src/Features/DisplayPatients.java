@@ -195,6 +195,55 @@ public class DisplayPatients extends JFrame {
         all.insets = new Insets(0,50,0,0);
         search_p1.add(searchbut1,all);
 
+
+
+        RoundedButtonPanel returnbut1 = new RoundedButtonPanel("Return", 3, Color.BLACK, Color.BLACK, Color.BLACK);
+        returnbut1.setFont(searchbutfont);
+        returnbut1.setForeground(Color.WHITE);
+        returnbut1.setPreferredSize(new Dimension(100,30));
+        returnbut1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Xóa dữ liệu cũ trong bảng
+                allPatientsModel.setRowCount(0);
+
+                // Truy vấn toàn bộ bệnh nhân
+                String query = "SELECT p.PatientID, p.FullName AS PatientName, p.Gender, p.DateOfBirth, " +
+                        "p.DiseaseName, p.DoctorID AS AssignedDoctorID, d.FullName AS AssignedDoctorName " +
+                        "FROM Patients p " +
+                        "JOIN Doctors d ON p.DoctorID = d.DoctorID " +
+                        "WHERE p.Specialization = (SELECT Specialization FROM Doctors WHERE DoctorID = ?)";
+
+                try (Connection connection = DatabaseConnect.getConnection();
+                     PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+                    pstmt.setInt(1, doctorID); // Sử dụng doctorID để lấy bệnh nhân trong khoa
+                    ResultSet rs = pstmt.executeQuery();
+
+                    // Lặp qua từng kết quả và thêm vào bảng
+                    while (rs.next()) {
+                        allPatientsModel.addRow(new Object[]{
+                                rs.getInt("PatientID"),
+                                rs.getString("PatientName"),
+                                rs.getString("Gender"),
+                                rs.getDate("DateOfBirth"),
+                                rs.getString("DiseaseName"),
+                                rs.getInt("AssignedDoctorID"),
+                                rs.getString("AssignedDoctorName")
+                        });
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        all.gridx=1;
+        all.gridy=1;
+        all.weightx=0;
+        all.weighty=0;
+        all.insets = new Insets(50,50,0,0);
+        search_p1.add(returnbut1, all);
+
         //panel search assign
         JPanel search_p2 = new JPanel(new GridBagLayout());
         search_p2.setPreferredSize(new Dimension(700, 200));
@@ -271,6 +320,53 @@ public class DisplayPatients extends JFrame {
         assign.weighty=0;
         assign.insets = new Insets(0,50,0,0);
         search_p2.add(searchbut2,assign);
+
+        RoundedButtonPanel returnbut2 = new RoundedButtonPanel("Return", 3, Color.BLACK, Color.BLACK, Color.BLACK);
+        returnbut2.setFont(searchbutfont);
+        returnbut2.setForeground(Color.WHITE);
+        returnbut2.setPreferredSize(new Dimension(100,30));
+        // Nút Return2 - Quay lại danh sách bệnh nhân phụ trách
+        returnbut2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Xóa dữ liệu cũ trong bảng
+                assignedPatientsModel.setRowCount(0);
+
+                // Truy vấn toàn bộ bệnh nhân mà bác sĩ phụ trách
+                String query = "SELECT PatientID, FullName, Gender, DateOfBirth, DiseaseName " +
+                        "FROM Patients " +
+                        "WHERE DoctorID = ?";
+
+                try (Connection connection = DatabaseConnect.getConnection();
+                     PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+                    pstmt.setInt(1, doctorID); // Sử dụng doctorID để lấy bệnh nhân phụ trách
+                    ResultSet rs = pstmt.executeQuery();
+
+                    // Lặp qua từng kết quả và thêm vào bảng
+                    while (rs.next()) {
+                        assignedPatientsModel.addRow(new Object[]{
+                                rs.getInt("PatientID"),
+                                rs.getString("FullName"),
+                                rs.getString("Gender"),
+                                rs.getDate("DateOfBirth"),
+                                rs.getString("DiseaseName")
+                        });
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        assign.gridx=1;
+        assign.gridy=1;
+        assign.weightx=0;
+        assign.weighty=0;
+        assign.insets = new Insets(50,50,0,0);
+        search_p2.add(returnbut2, assign);
+
+
 
 
         this.add(background, BorderLayout.CENTER);
